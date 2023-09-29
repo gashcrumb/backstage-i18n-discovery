@@ -11,7 +11,9 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: example-website
+  name: my-example-website
+  annotations:
+    backstage.io/adr-location: https://github.com/adr/madr/tree/develop/docs/decisions
 spec:
   type: website
   lifecycle: experimental

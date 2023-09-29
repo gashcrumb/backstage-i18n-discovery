@@ -33,24 +33,40 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import { adrTranslationRef } from '@backstage/plugin-adr/alpha';
+import { createTranslationMessages } from '@backstage/core-plugin-api/alpha';
 
 const app = createApp({
+  __experimentalTranslations: {
+    availableLanguages: ['en'],
+    resources: [
+      createTranslationMessages({
+        messages: {
+          content_header_title: `Awesome Decision Records`,
+          failed_to_fetch: 'Failed to fetch those awesome records',
+          no_adrs: 'No Awesome records Found',
+          records: 'Records',
+        } as any,
+        ref: adrTranslationRef,
+      }),
+    ]
+  },
   apis,
   bindRoutes({ bind }) {
+    bind(apiDocsPlugin.externalRoutes, {
+      registerApi: catalogImportPlugin.routes.importPage,
+    });
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
       viewTechDoc: techdocsPlugin.routes.docRoot,
       createFromTemplate: scaffolderPlugin.routes.selectedTemplate,
     });
-    bind(apiDocsPlugin.externalRoutes, {
-      registerApi: catalogImportPlugin.routes.importPage,
+    bind(orgPlugin.externalRoutes, {
+      catalogIndex: catalogPlugin.routes.catalogIndex,
     });
     bind(scaffolderPlugin.externalRoutes, {
       registerComponent: catalogImportPlugin.routes.importPage,
       viewTechDoc: techdocsPlugin.routes.docRoot,
-    });
-    bind(orgPlugin.externalRoutes, {
-      catalogIndex: catalogPlugin.routes.catalogIndex,
     });
   },
 });
