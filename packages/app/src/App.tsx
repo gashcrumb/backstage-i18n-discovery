@@ -33,23 +33,41 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import { adrTranslationRef } from '@backstage/plugin-adr/alpha';
-import { createTranslationMessages } from '@backstage/core-plugin-api/alpha';
+import { I18NExampleFrontendPage } from '@internal/plugin-i18n-example-frontend';
+
+import { appTranslationRef } from './translation';
+import { i18nExampleFrontendTranslationRef } from '@internal/plugin-i18n-example-frontend';
+import { userSettingsTranslationRef } from '@backstage/plugin-user-settings/alpha';
+import { createTranslationResource } from '@backstage/core-plugin-api/alpha';
 
 const app = createApp({
   __experimentalTranslations: {
-    availableLanguages: ['en'],
+    availableLanguages: ['en', 'de'],
     resources: [
-      createTranslationMessages({
-        messages: {
-          content_header_title: `Awesome Decision Records`,
-          failed_to_fetch: 'Failed to fetch those awesome records',
-          no_adrs: 'No Awesome records Found',
-          records: 'Records',
-        } as any,
-        ref: adrTranslationRef,
+      createTranslationResource({
+        translations: {
+          default: async () => await import('./locales/app/en.json'),
+          de: async () => await import('./locales/app/de.json'),
+        },
+        ref: appTranslationRef,
       }),
-    ]
+      createTranslationResource({
+        translations: {
+          default: async () =>
+            await import('./locales/i18n-example-frontend/en.json'),
+          de: async () =>
+            await import('./locales/i18n-example-frontend/de.json'),
+        },
+        ref: i18nExampleFrontendTranslationRef,
+      }),
+      createTranslationResource({
+        translations: {
+          default: async () => await import('./locales/user-settings/en.json'),
+          de: async () => await import('./locales/user-settings/de.json'),
+        },
+        ref: userSettingsTranslationRef,
+      }),
+    ],
   },
   apis,
   bindRoutes({ bind }) {
@@ -109,6 +127,10 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route
+      path="/i18n-example-frontend"
+      element={<I18NExampleFrontendPage />}
+    />
   </FlatRoutes>
 );
 

@@ -55,7 +55,6 @@ import {
   RELATION_PROVIDES_API,
 } from '@backstage/catalog-model';
 
-import { EntityAdrContent, isAdrAvailable } from '@backstage/plugin-adr';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
@@ -147,11 +146,6 @@ const serviceEntityPage = (
       {overviewContent}
     </EntityLayout.Route>
 
-
-    <EntityLayout.Route if={isAdrAvailable} path="/adrs" title="ADRs">
-      <EntityAdrContent />
-    </EntityLayout.Route>
-
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
     </EntityLayout.Route>
@@ -188,10 +182,6 @@ const websiteEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
-    </EntityLayout.Route>
-
-    <EntityLayout.Route if={isAdrAvailable} path="/adrs" title="ADRs">
-      <EntityAdrContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
